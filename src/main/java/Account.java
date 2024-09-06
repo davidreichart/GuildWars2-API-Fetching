@@ -39,5 +39,10 @@ public class Account {
             System.out.println(ioException.getMessage());
             return false;
         }
+
+    }
+
+    public String getApiKey() {
+        return apiKey;
     }
 }

@@ -1,27 +1,24 @@
+import com.google.gson.Gson;
 import constants.AccountEndpoints;
 
-import javax.net.ssl.HttpsURLConnection;
-import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.concurrent.*;
 
 public final class HttpAgent {
     private HttpAgent() {}
 
-    public static HttpsURLConnection openGetConnection(String apiKey, URL endpointURL) {
-        HttpsURLConnection connection = null;
-        try {
-            connection = (HttpsURLConnection) endpointURL.openConnection();
-            connection.setRequestProperty("Authorization", apiKey);
-            connection.setRequestMethod("GET");
-        }
-        catch (IOException ioException) {
-            System.out.println(ioException.getMessage());
-        }
-        return connection;
-    }
-
-    public static Object getResource(AccountEndpoints endpoint, String apiKey) {
-        URL endpointURL = endpoint.toURL();
-        HttpsURLConnection connection = openGetConnection(apiKey, endpointURL);
+    public static String getJsonResponse(AccountEndpoints endpoint, String apiKey) throws ExecutionException, InterruptedException, TimeoutException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(endpoint.toString()))
+                .GET()
+                .header("Authorization", apiKey)
+                .build();
+        CompletableFuture<HttpResponse<String>> response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+        String jsonResponse = response.thenApply(HttpResponse::body).get(5, TimeUnit.SECONDS);
+        return jsonResponse;
     }
 }
