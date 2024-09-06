@@ -7,6 +7,7 @@ import java.net.URL;
 
 public class Main {
     public static void main(String[] args) {
+        /*
         // store JSON response
         StringBuilder JSONResponse = new StringBuilder();
 
@@ -39,6 +40,10 @@ public class Main {
             System.out.println(ioException.getMessage());
         }
 
+
         System.out.println(JSONResponse.toString());
+
+         */
+        Account account = new Account("Bearer 74135AA2-6CF5-B44E-AE7C-E9C3CF2DA258073196D5-5C9D-4AAF-8152-5DBCAA0A8653");
     }
 }
